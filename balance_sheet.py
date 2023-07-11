@@ -7,7 +7,9 @@ import csv
 import glob
 import openpyxl
 import pandas as pd
+import string
 
+balance_sheet_keys = [None, 'Basic EPS (Rs.)', 'Diluted EPS (Rs.)', 'Cash EPS (Rs.)', 'Book Value [ExclRevalReserve]/Share (Rs.)', 'Book Value [InclRevalReserve]/Share (Rs.)', 'Dividend / Share(Rs.)', 'Revenue from Operations/Share (Rs.)', 'PBDIT/Share (Rs.)', 'PBIT/Share (Rs.)', 'PBT/Share (Rs.)', 'Net Profit/Share (Rs.)', 'PBDIT Margin (%)', 'PBIT Margin (%)', 'PBT Margin (%)', 'Net Profit Margin (%)', 'Return on Networth / Equity (%)', 'Return on Capital Employed (%)', 'Return on Assets (%)', 'Total Debt/Equity (X)', 'Asset Turnover Ratio (%)', 'Current Ratio (X)', 'Quick Ratio (X)', 'Inventory Turnover Ratio (X)', 'Dividend Payout Ratio (NP) (%)', 'Dividend Payout Ratio (CP) (%)', 'Earnings Retention Ratio (%)', 'Cash Earnings Retention Ratio (%)', 'Enterprise Value (Cr.)', 'EV/Net Operating Revenue (X)', 'EV/EBITDA (X)', 'MarketCap/Net Operating Revenue (X)', 'Retention Ratios (%)', 'Price/BV (X)', 'Price/Net Operating Revenue', 'Earnings Yield']
 
 def get_html(url):
     """ Get the HTML of a URL """
@@ -58,7 +60,6 @@ def print_csv_columns():
         #             continue
     return dataset
 
-
 def scrape_table(url, stock_name, sheet_name, next_page=False):
     """ Scrape a table from a web page """
     soup = get_html(url)
@@ -93,9 +94,6 @@ def scrape_quick_links(url):
     quick_links = soup.find('div', {'class': 'quick_links clearfix'})
     links = quick_links.find_all('a')
     return links
-    # for link in links:
-    #     df[]
-    #     print("{} {}".format(link.text, link['href']))
 
 def get_company_name(url):
   soup = get_html(url)
@@ -141,26 +139,39 @@ def scrape_table(url, stock_name, sheet_name, next_page=False):
 
     wb.save('{}.xlsx'.format(stock_name))
 
+def remove_punctuations(text):
+    for punctuation in string.punctuation:
+        text = text.replace(punctuation, '')
+    return text
+
+def get_nifty_mc_dataset(nifty_file):
+    """ Creates a dataset by combining the data from the money control web scraping and 
+    nifty list from the NSE."""
+    dataset = print_csv_columns()
+    dataset.columns = ['Company Name', 'Company Url']
+    nifty_data = pd.read_csv(nifty_file)
+    nifty_data['Company Name'] =  nifty_data['Company Name'].str.replace("&", "and")
+    nifty_data['company_short_form'] = nifty_data['Company Name'].str.lower().str.replace("&", "and").apply(remove_punctuations)
+    dataset['Company Name'] =  dataset['Company Name'].str.replace("&", "and")
+    dataset['company_short_form'] = dataset['Company Name'].str.lower().str.replace("&", "and").apply(remove_punctuations)
+    new_data = dataset.merge(nifty_data,on='company_short_form' ,how='right')
+    nifty_mc_dataset = new_data.drop(['Series', 'ISIN Code', 'company_short_form'], axis=1)
+    return nifty_mc_dataset
+
+def get_fundamental_data_for_company(dataset, url):
+    links_set = scrape_quick_links(url)
+    temp_data = {}
+    for link in links:
+        if link.text == "Balance Sheet" or link.text == "Profit & Loss" or link.text == "Cash Flows":
+            temp_data[link.text] = link['href']
 
 def main():
     """ Get all the stock web links from A-Z available on 
     moneycontrol and store them into 
     csv files alphabetically """
-    # # """ Get contents from the generated csv files """
-    # dataframe = pd.read_csv('file_name.csv')
-    # print(dataframe)
-    dataset = print_csv_columns()
 
-    dataset.columns = ['Company Name', 'Company Url']
-    print(dataset.head())
+    nifty_money_control_base_dataset = get_nifty_mc_dataset('ind_nifty100list.csv')
 
-    nifty_data = pd.read_csv('ind_nifty100list.csv')
-    # new_data = dataset.merge(nifty_data,how='right')
-    # temp_data = new_data[new_data['Company Url'].isna()]
-    # for index, row in nifty_data.iterrows():
-    #     loc = dataset.loc[dataset['Company Name'] == row['Company Name']]
-    #     print(row['Company Name'])
-    print(dataset[dataset['Company Name']]== "Zensar Technologies Ltd.")
     # """ Read a url for stock and scrape the urls of financial section
     # like Balance Sheet, Profit and Loss and, Quarterly an Yearly results,
     # Cashflow statments, etc. """
