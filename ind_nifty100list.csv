@@ -1,4 +1,4 @@
-Company Name,Industry,Symbol,Series,ISIN Code
+Company Name,Industry,Symbol,Series,ISIN Code,Market Cap,Price,P/E,Book Value,ROCE,ROE
 ABB India Ltd.,Capital Goods,ABB,EQ,INE117A01022
 ACC Ltd.,Construction Materials,ACC,EQ,INE012A01025
 Adani Enterprises Ltd.,Metals & Mining,ADANIENT,EQ,INE423A01024
@@ -52,7 +52,7 @@ ICICI Lombard General Insurance Company Ltd.,Financial Services,ICICIGI,EQ,INE76
 ICICI Prudential Life Insurance Company Ltd.,Financial Services,ICICIPRULI,EQ,INE726G01019
 ITC Ltd.,Fast Moving Consumer Goods,ITC,EQ,INE154A01025
 Indian Oil Corporation Ltd.,Oil Gas & Consumable Fuels,IOC,EQ,INE242A01010
-IRCTC - Indian Railway Catering & Tourism Corp Ltd.,Consumer Services,IRCTC,EQ,INE335Y01020
+Indian Railway Catering & Tourism Corporation Ltd.,Consumer Services,IRCTC,EQ,INE335Y01020
 Indus Towers Ltd.,Telecommunication,INDUSTOWER,EQ,INE121J01017
 IndusInd Bank Ltd.,Financial Services,INDUSINDBK,EQ,INE095A01012
 Info Edge (India) Ltd.,Consumer Services,NAUKRI,EQ,INE663F01024
@@ -80,7 +80,7 @@ SBI Cards and Payment Services Ltd.,Financial Services,SBICARD,EQ,INE018E01016
 SBI Life Insurance Company Ltd.,Financial Services,SBILIFE,EQ,INE123W01016
 SRF Ltd.,Chemicals,SRF,EQ,INE647A01010
 Samvardhana Motherson International Ltd.,Automobile and Auto Components,MOTHERSON,EQ,INE775A01035
-Shree Cements Ltd.,Construction Materials,SHREECEM,EQ,INE070A01015
+Shree Cement Ltd.,Construction Materials,SHREECEM,EQ,INE070A01015
 Siemens Ltd.,Capital Goods,SIEMENS,EQ,INE003A01024
 State Bank of India,Financial Services,SBIN,EQ,INE062A01020
 Sun Pharmaceutical Industries Ltd.,Healthcare,SUNPHARMA,EQ,INE044A01036
