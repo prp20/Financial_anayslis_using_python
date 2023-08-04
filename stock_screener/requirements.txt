@@ -1,0 +1,9 @@
+pandas
+numpy
+beautifulsoup4
+fastapi
+uvicorn
+streamlit
+plotly
+plotly_express
+yfinance
